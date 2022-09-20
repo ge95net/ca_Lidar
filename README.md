@@ -13,6 +13,4 @@ python test.py --policy ca_lidar --phase test
 ```
 
 ## Simulation Vedios
-<img src="https://github.com/ge95net/ca_Lidar/blob/master/demo/demo1.gif" width="500" />
-<img src="https://github.com/ge95net/ca_Lidar/blob/master/demo/demo2.gif" width="500" />
-<img src="https://github.com/ge95net/ca_Lidar/blob/master/demo/demo3.gif" width="500" />
+<img src="https://github.com/ge95net/ca_Lidar/blob/master/demo/ICRA.gif" width="500" />
