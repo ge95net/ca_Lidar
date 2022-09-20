@@ -24,6 +24,9 @@ import seaborn as sns
 from matplotlib.animation import FuncAnimation
 import threading
 from matplotlib import cm
+import matplotlib
+matplotlib.rcParams['pdf.fonttype'] = 42
+matplotlib.rcParams['ps.fonttype'] = 42
 class CrowdSim(gym.Env):
     metadata = {'render.modes': ['human']}
 
@@ -608,7 +611,7 @@ class CrowdSim(gym.Env):
                 print("max step time = ", np.max(self.all_max_time))
                 for human in self.humans:
                     human.agent.stop()
-                self.render()
+                #self.render()
 
 
             next_batch_map = []
@@ -726,17 +729,19 @@ class CrowdSim(gym.Env):
         x_offset = 0.11
         y_offset = 0.11
         cmap = plt.cm.get_cmap('hsv', 10)
-        robot_color = 'blue'
+        robot_color = 'royalblue'
         goal_color = 'red'
         arrow_color = 'red'
         arrow_style = patches.ArrowStyle("->", head_length=4, head_width=2)
         fig, ax = plt.subplots(figsize=(7, 7))
         ax.tick_params(labelsize=16)
         ax.set_xlim(-5, 5)
-        ax.set_ylim(-5, 5)
-        ax.set_xlabel('x(m)', fontsize=16)
-        ax.set_ylabel('y(m)', fontsize=16)
-
+        ax.set_ylim(-5, 6)
+        ax.set_xlabel('', fontsize=16)
+        ax.set_ylabel('', fontsize=16)
+        plt.xticks([])
+        plt.yticks([])
+        color =['darkgreen','darkgoldenrod','darkred','darkmagenta','darkcyan']
         robot_positions = [self.states[i][0].position for i in range(len(self.states))]
         print(len(robot_positions))
         human_positions = [[self.states[i][1][j].position for j in range(len(self.humans))]
@@ -745,7 +750,9 @@ class CrowdSim(gym.Env):
         goal_position = plt.Rectangle(goal_position,0.5,0.5,fill=True,color="red")
         ax.add_artist(goal_position)
         for k in range(len(self.states)):
-            if (k % 10 == 0 or k == len(self.states) - 1) and k!=0:
+            robot = plt.Circle([100,100], 0.26, fill=True, color=robot_color)
+            humans = plt.Circle([100,100], 0.26, fill=True, color=robot_color)
+            if (k % 20 == 0 or k == len(self.states) - 1) and k!=0:
                 robot = plt.Circle(robot_positions[k], 0.26, fill=True, color=robot_color)
                 humans = [plt.Circle(human_positions[k][i], self.humans[i].radius, fill=False, color='black')
                           for i in range(len(self.humans))]
@@ -767,13 +774,12 @@ class CrowdSim(gym.Env):
                                            color=robot_color, ls='solid')
                 human_directions = [plt.Line2D((self.states[k - 1][1][i].px, self.states[k][1][i].px),
                                                (self.states[k - 1][1][i].py, self.states[k][1][i].py),
-                                               color=cmap(i), ls='solid')
+                                               color=color[i], ls='solid',linewidth=0.5)
                                     for i in range(self.human_num)]
                 ax.add_artist(nav_direction)
                 for human_direction in human_directions:
                     ax.add_artist(human_direction)
-        plt.legend([robot,goal_position], ['Robot','Goal'], fontsize=16)
-
+        plt.legend([robot,goal_position], ['Robot','Goal'], fontsize=24,loc='upper left',ncol=2,columnspacing=0.3)
         plt.show()
 
 
